@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from string import digits, uppercase
+from itertools import product
+import sched, time
+from os import path
+import requests
+
+# Change USER for your user number and execute
+
+URL = 'http://cstrips.bitstrips.com/%s_USER.png'
+WAITTIME = 0.05
+
 """ download images """
 def dwIMG(p_sID):
     sURL = URL % p_sID
