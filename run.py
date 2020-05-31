@@ -3,29 +3,31 @@
 
 from string import digits, uppercase
 from itertools import product
-import sched, time
+import sched, time, requests
 from os import path
-import requests
+from progress.bar import IncrementalBar
 
-# Change USER for your user number and execute
+# Change USER to your user ID and execute
 
 URL = 'http://cstrips.bitstrips.com/%s_USER.png'
 WAITTIME = 0.05
 
+bar = IncrementalBar('Processing', max=60466176)
+
 """ download images """
 def dwIMG(p_sID):
+    bar.next()
+
     sURL = URL % p_sID
-    print sURL, 
+    #print sURL,
     r = requests.get(sURL)
-    
+
     if r.status_code == 200:
         f = open(p_sID + '.png','wb')
         f.write(r.content)
         f.close()
-        print 'OK'
-    else:
-        print 'NONE'
-
+        print ' YES'
+        #print ' NONE'
 
 def genIDS():
     chars = digits + uppercase
@@ -34,11 +36,11 @@ def genIDS():
     for sID in product(chars, repeat=5):
         iCurrent += 1
 
-        # ignore already tested IDs
+        # Ignore already tested IDs
         if iCurrent < iLast:
             continue
 
-        # save each 1000 iterations
+        # Save each 1000 iterations
         if not iCurrent % 1000:
             savLAST(iCurrent)
 
@@ -53,7 +55,7 @@ def savLAST(p_iNum):
     f.write(str(p_iNum))
     f.close()
     print "** saved session [", p_iNum, "] **"
-    
+
 
 def getLAST():
     if path.isfile(FILELAST):
