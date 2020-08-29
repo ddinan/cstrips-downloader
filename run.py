@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from threading import Thread
-from Queue import Queue
-from string import digits, uppercase
+from queue import Queue
+from string import digits, ascii_uppercase
 from itertools import product
 import sched
 import time
@@ -56,7 +56,7 @@ def genIDS():
         t.start()
 
     print("computing ids")
-    chars = digits + uppercase
+    chars = digits + ascii_uppercase
     for sID in product(chars, repeat=5):
         q.put(''.join(sID))
         bar.next()
