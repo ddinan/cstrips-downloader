@@ -10,6 +10,6 @@ The script should now be running and starting to scan through and download your 
 
 **KEEP IN MIND:**
 
-There are `60466176` possible combinations to scan for so it **will take a very long time** to download your comics. I did the math for my router and it estimated at around `29.16` days to download all comics. Feel free to look for ways to make the script faster. If you have any issues regarding installing or running, please make an issue [here](https://github.com/VenkSociety/CStrips-Downloader/issues) that shows the error or problem you're having.
+There are `60466176` possible combinations to scan for so it **will take a very long time** to download your comics. I did the math for my router and it estimated at around `29.16` hours to download all comics but that depends on your internet speed. Feel free to look for ways to make the script faster. If you have any issues regarding installing or running, please make an issue [here](https://github.com/VenkSociety/CStrips-Downloader/issues) that shows the error or problem you're having.
 
 Enjoy your comics!
