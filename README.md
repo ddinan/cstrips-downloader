@@ -3,7 +3,7 @@
 2. Replace `_USER` in [run.py](https://github.com/VenkSociety/CStrips-Downloader/blob/master/run.py#L16) with yours or your friend's Bitstrips user ID. For example https://bitstrips.com/user/D53J, the ID would be `_D53J`.
 3. Open your command prompt or terminal _(Type `cmd` into your  Windows search bar)_.
 4. `cd` to the folder where you downloaded the script. E.g, `cd C:\Users\Buddy\Desktop\CStrips Downloader`.
-5. Type these two commands: `py -m pip install progress` and `py -m pip install requests``
+5. Type these two commands: `py -m pip install progress` and `py -m pip install requests`.
 5. To run the script type the following command: `py run.py`.
 
 The script should now be running and starting to scan through and download your comics.
