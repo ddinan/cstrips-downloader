@@ -9,24 +9,38 @@ import sched
 import time
 import requests
 from os import path
+from progressBar import GetPatchedProgress
+progress = GetPatchedProgress()
 from progress.bar import IncrementalBar
+
+while True:
+    val = input("Please enter your alphanumeric ID: ")
+
+    if val.isdigit():
+        print("Your ID should be alphanumeric and not consist of only numbers. For example JH38B is correct whereas 2862743 is not.");
+        continue
+    elif val.isalnum():
+        break
+
+while True:
+    print("Starting to scan database for ID " + val + "...")
+    break
 
 # Change USER to your user ID and execute
 
-URL = 'http://cstrips.bitstrips.com/%s_USER.png'
+URL = 'http://cstrips.bitstrips.com/%s_' + val + '.png'
 WAITTIME = 0.05
 CONCURRENCY = 20
 
-bar = IncrementalBar('Processing', max=60466176)
+bar = IncrementalBar('Processing ', max=60466176)
 
 """ download images """
-
 
 def dwIMG(p_sID):
     sURL = URL % p_sID
     idPath = p_sID + '.png'
     if path.exists(idPath):
-        print(idPath, "already exists, skipping")
+        print(idPath, " already exists, skipping")
         return
 
     # print sURL,
