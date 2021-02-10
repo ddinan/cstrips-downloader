@@ -71,13 +71,43 @@ def genIDS():
 
     print("computing ids")
     chars = digits + ascii_uppercase
+    iLast = getLAST()
+    iCurrent = -1
+
     for sID in product(chars, repeat=5):
+        iCurrent += 1
+
+        if iCurrent < iLast:
+            continue
+
+        if not iCurrent % 1000:
+            savLAST(iCurrent)
         q.put(''.join(sID))
         bar.next()
 
     print("done computing")
 
     q.join()
+
+# ----------------- recover last session
+FILELAST = 'session.last'
+
+def savLAST(p_iNum):
+    f = open(FILELAST,'w')
+    f.write(str(p_iNum))
+    f.close()
+
+
+def getLAST():
+    if path.isfile(FILELAST):
+        f = open(FILELAST,'r')
+        iNum = int(f.read(), 10)
+        print("recover from:", iNum)
+        f.close()
+        return iNum
+    else:
+        print("process started...")
+        return 0
 
 
 if __name__ == '__main__':
