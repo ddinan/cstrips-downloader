@@ -32,15 +32,12 @@ URL = 'http://cstrips.bitstrips.com/%s_' + val + '.png'
 WAITTIME = 0.05
 CONCURRENCY = 20
 
-bar = IncrementalBar('Processing ', max=60466176)
-
-""" download images """
+bar = IncrementalBar('Processing ', suffix='%(index)d/%(max)d %(percent)d%% [%(elapsed_td)s / %(eta)d / %(eta_td)s]', max=60466176)
 
 def dwIMG(p_sID):
     sURL = URL % p_sID
     idPath = p_sID + '.png'
     if path.exists(idPath):
-        print(idPath, " already exists, skipping")
         return
 
     # print sURL,
@@ -74,6 +71,8 @@ def genIDS():
     iLast = getLAST()
     iCurrent = -1
 
+    bar.goto(iLast)
+
     for sID in product(chars, repeat=5):
         iCurrent += 1
 
@@ -81,18 +80,18 @@ def genIDS():
             continue
 
         if not iCurrent % 1000:
-            savLAST(iCurrent)
+            saveLAST(iCurrent)
         q.put(''.join(sID))
         bar.next()
 
-    print("done computing")
-
+    print("The script has scanned all possible URLs for your comics and downloaded them.")
     q.join()
+    bar.finish()
 
 # ----------------- recover last session
 FILELAST = 'session.last'
 
-def savLAST(p_iNum):
+def saveLAST(p_iNum):
     f = open(FILELAST,'w')
     f.write(str(p_iNum))
     f.close()
@@ -102,11 +101,10 @@ def getLAST():
     if path.isfile(FILELAST):
         f = open(FILELAST,'r')
         iNum = int(f.read(), 10)
-        print("recover from:", iNum)
+        print("Recovering from:", iNum)
         f.close()
         return iNum
     else:
-        print("process started...")
         return 0
 
 
