@@ -6,6 +6,9 @@
 
 The script should now be running and starting to scan through and download your comics.
 
+# How to find your alphanumeric user ID
+If you have forgotten your user ID, there are a few useful methods you can try to find it. See the [wiki](https://github.com/ddinan/cstrips-downloader/wiki) for more information.
+
 # Building from source:
 1. Download and install [Python](https://www.python.org/downloads/) _(Standalone CLI app is planned)_.
 2. Download [this repository](https://github.com/ddinan/CStrips-Downloader/archive/master.zip).
