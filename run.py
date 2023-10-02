@@ -5,19 +5,16 @@ from threading import Thread
 from queue import Queue
 from string import digits, ascii_uppercase
 from itertools import product
-import sched
 import time
 import requests
 from os import path
-from progressBar import GetPatchedProgress
-progress = GetPatchedProgress()
-from progress.bar import IncrementalBar
+from tqdm import tqdm
 
 while True:
     val = input("Please enter your alphanumeric ID: ")
 
     if val.isdigit():
-        print("Your ID should be alphanumeric and not consist of only numbers. For example JH38B is correct whereas 2862743 is not.");
+        print("Your ID should be alphanumeric and not consist of only numbers. For example JH38B is correct whereas 2862743 is not.")
         continue
     elif val.isalnum():
         break
@@ -32,22 +29,17 @@ URL = 'http://cstrips.bitstrips.com/%s_' + val + '.png'
 WAITTIME = 0.05
 CONCURRENCY = 20
 
-bar = IncrementalBar('Processing ', suffix='%(index)d/%(max)d %(percent)d%% [%(elapsed_td)s / %(eta)d / %(eta_td)s]', max=60466176)
-
 def dwIMG(p_sID):
     sURL = URL % p_sID
     idPath = p_sID + '.png'
     if path.exists(idPath):
         return
 
-    # print sURL,
     r = requests.get(sURL)
 
     if r.status_code == 200:
-        f = open(idPath, 'wb')
-        f.write(r.content)
-        f.close()
-
+        with open(idPath, 'wb') as f:
+            f.write(r.content)
 
 def genIDS():
     q = Queue(CONCURRENCY * 2)
@@ -57,8 +49,8 @@ def genIDS():
             id = q.get()
             try:
                 dwIMG(id)
-            except:
-                print("error", id)
+            except Exception as e:
+                print(f"error {id}: {e}")
             q.task_done()
 
     for i in range(CONCURRENCY):
@@ -71,42 +63,36 @@ def genIDS():
     iLast = getLAST()
     iCurrent = -1
 
-    bar.goto(iLast)
+    with tqdm(total=60466176, initial=iLast, position=0, leave=True) as pbar:
+        for sID in product(chars, repeat=5):
+            iCurrent += 1
 
-    for sID in product(chars, repeat=5):
-        iCurrent += 1
+            if iCurrent < iLast:
+                continue
 
-        if iCurrent < iLast:
-            continue
-
-        if not iCurrent % 1000:
-            saveLAST(iCurrent)
-        q.put(''.join(sID))
-        bar.next()
+            if not iCurrent % 1000:
+                saveLAST(iCurrent)
+            q.put(''.join(sID))
+            pbar.update()
 
     print("The script has scanned all possible URLs for your comics and downloaded them.")
     q.join()
-    bar.finish()
 
 # ----------------- recover last session
 FILELAST = 'session.last'
 
 def saveLAST(p_iNum):
-    f = open(FILELAST,'w')
-    f.write(str(p_iNum))
-    f.close()
-
+    with open(FILELAST,'w') as f:
+        f.write(str(p_iNum))
 
 def getLAST():
     if path.isfile(FILELAST):
-        f = open(FILELAST,'r')
-        iNum = int(f.read(), 10)
-        print("Recovering from:", iNum)
-        f.close()
-        return iNum
+        with open(FILELAST,'r') as f:
+            iNum = int(f.read(), 10)
+            print("Recovering from:", iNum)
+            return iNum
     else:
         return 0
-
 
 if __name__ == '__main__':
     genIDS()
